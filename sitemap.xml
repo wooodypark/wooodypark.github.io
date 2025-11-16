@@ -35,12 +35,7 @@ layout: null
   
   <!-- Pages -->
   {% for page in site.pages %}
-    {% if page.layout == 'page' or page.layout == 'about-me' or page.layout == 'contact' %}
-      {% unless page.url contains '/build/' %}
-      {% unless page.url contains '/admin/' %}
-      {% unless page.url contains '404' %}
-      {% unless page.url contains 'SECURITY' %}
-      {% unless page.url contains 'googlef01e39e4d240f6b0' %}
+    {% if page.layout == 'about-me' or page.layout == 'contact' %}
   <url>
     <loc>{{ site.url }}{{ site.baseurl }}{{ page.url }}</loc>
     {% if page.last_modified_at %}
@@ -49,11 +44,6 @@ layout: null
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
-      {% endunless %}
-      {% endunless %}
-      {% endunless %}
-      {% endunless %}
-      {% endunless %}
     {% endif %}
   {% endfor %}
   
