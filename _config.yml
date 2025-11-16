@@ -156,6 +156,12 @@ defaults:
       path: 'assets/**'
     values:
       sitemap: false
+  -
+    scope:
+      path: ""
+      files: ["SECURITY.md", "googlef01e39e4d240f6b0.html"]
+    values:
+      sitemap: false
 
 # Build settings
 plugins:
@@ -207,6 +213,11 @@ exclude:
   - vendor/cache/
   - vendor/gems/
   - vendor/ruby/
+  - build/
+  - admin/
+  - assets/bower_components/
+  - SECURITY.md
+  - googlef01e39e4d240f6b0.html
   - assets/bower_components/isotope-layout/README.md
   - assets/bower_components/icono/README.md
   - assets/bower_components/font-awesome/advanced-options/use-with-node-js/fontawesome-svg-core/README.md
