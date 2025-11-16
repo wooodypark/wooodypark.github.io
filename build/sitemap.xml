@@ -1,66 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url>
-<loc>http://localhost:4000/blog/authors/woodypark</loc>
-<lastmod>2025-11-16T16:42:47+09:00</lastmod>
-</url>
-<url>
-<loc>http://localhost:4000/blog/sql-query-tuning-index-type-conversion/</loc>
-<lastmod>2025-11-15T20:45:31+09:00</lastmod>
-</url>
-<url>
-<loc>http://localhost:4000/about/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/about/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/blog/categories/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/contact/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/blog/categories/guides/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/gallery/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/blog/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/get-started/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/blog/categories/jekyll/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/gallery/mountains/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/blog/categories/sample_category/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/shop/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/sponsors/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/blog/categories/sql/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/styleguide/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/admin/</loc>
-<lastmod>2025-11-01T03:19:07+09:00</lastmod>
-</url>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Homepage -->
+  <url>
+    <loc>http://localhost:4000/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  <!-- Blog index -->
+  <url>
+    <loc>http://localhost:4000/blog/</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Posts -->
+  
+  <url>
+    <loc>http://localhost:4000/blog/sql-query-tuning-index-type-conversion/</loc>
+    
+    <lastmod>2025-11-15T20:45:31+09:00</lastmod>
+    
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  
+  <!-- Pages -->
+  
+    
+  
+    
+  
+    
+  <url>
+    <loc>http://localhost:4000/about/</loc>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+    
+  
+    
+  
+    
+  <url>
+    <loc>http://localhost:4000/contact/</loc>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+  
+  <!-- Authors -->
+  
+  <url>
+    <loc>http://localhost:4000/blog/authors/woodypark</loc>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
 </urlset>
+

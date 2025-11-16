@@ -215,7 +215,6 @@ exclude:
   - vendor/ruby/
   - build/
   - admin/
-  - assets/bower_components/
   - SECURITY.md
   - googlef01e39e4d240f6b0.html
   - assets/bower_components/isotope-layout/README.md
