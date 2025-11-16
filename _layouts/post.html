@@ -5,7 +5,7 @@ layout: default
 <div class="row justify-content-center" id="blog-post-container">
   <div class="col-lg-10">
     {%- include blog_post_article.html -%}
-     {%- include blog_post_comments.html-%}
+    {%- include blog_post_comments.html-%}
   </div>
 </div>
 <div class="row">
@@ -14,7 +14,7 @@ layout: default
       <div class="card-header">About {{site.author}}</div>
       <div class="card-body">
         <p class="author_bio">{{ site.author_bio }}</p>
-        {%- include github_star_button.html -%}
+        {% if site.github_username %} {%- include github_follow_button.html -%} {% endif %}
       </div>
     </div>
   </div>
@@ -39,4 +39,3 @@ layout: default
     </div>
   </div>
 </div>
-
