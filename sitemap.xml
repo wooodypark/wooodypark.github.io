@@ -21,56 +21,52 @@ layout: null
   
   <!-- Posts -->
   {% for post in site.posts %}
-    {% unless post.sitemap == false %}
-    <url>
-      <loc>{{ site.url }}{{ site.baseurl }}{{ post.url }}</loc>
-      {% if post.last_modified_at %}
-        <lastmod>{{ post.last_modified_at | date_to_xmlschema }}</lastmod>
-      {% else %}
-        <lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
-      {% endif %}
-      <changefreq>weekly</changefreq>
-      <priority>0.8</priority>
-    </url>
-    {% endunless %}
+  <url>
+    <loc>{{ site.url }}{{ site.baseurl }}{{ post.url }}</loc>
+    {% if post.last_modified_at %}
+    <lastmod>{{ post.last_modified_at | date_to_xmlschema }}</lastmod>
+    {% else %}
+    <lastmod>{{ post.date | date_to_xmlschema }}</lastmod>
+    {% endif %}
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   {% endfor %}
   
   <!-- Pages -->
   {% for page in site.pages %}
-    {% unless page.sitemap == false %}
-    {% unless page.url contains '/build/' %}
-    {% unless page.url contains '/admin/' %}
-    {% unless page.url contains '404' %}
-    {% unless page.url contains 'SECURITY' %}
-    {% unless page.url contains 'googlef01e39e4d240f6b0' %}
-    <url>
-      <loc>{{ site.url }}{{ site.baseurl }}{{ page.url }}</loc>
-      {% if page.last_modified_at %}
-        <lastmod>{{ page.last_modified_at | date_to_xmlschema }}</lastmod>
-      {% endif %}
-      <changefreq>monthly</changefreq>
-      <priority>0.6</priority>
-    </url>
-    {% endunless %}
-    {% endunless %}
-    {% endunless %}
-    {% endunless %}
-    {% endunless %}
-    {% endunless %}
+    {% if page.layout == 'page' or page.layout == 'about-me' or page.layout == 'contact' %}
+      {% unless page.url contains '/build/' %}
+      {% unless page.url contains '/admin/' %}
+      {% unless page.url contains '404' %}
+      {% unless page.url contains 'SECURITY' %}
+      {% unless page.url contains 'googlef01e39e4d240f6b0' %}
+  <url>
+    <loc>{{ site.url }}{{ site.baseurl }}{{ page.url }}</loc>
+    {% if page.last_modified_at %}
+    <lastmod>{{ page.last_modified_at | date_to_xmlschema }}</lastmod>
+    {% endif %}
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+      {% endunless %}
+      {% endunless %}
+      {% endunless %}
+      {% endunless %}
+      {% endunless %}
+    {% endif %}
   {% endfor %}
   
   <!-- Authors -->
   {% for author in site.authors %}
-    {% unless author.sitemap == false %}
-    <url>
-      <loc>{{ site.url }}{{ site.baseurl }}{{ author.url }}</loc>
-      {% if author.last_modified_at %}
-        <lastmod>{{ author.last_modified_at | date_to_xmlschema }}</lastmod>
-      {% endif %}
-      <changefreq>monthly</changefreq>
-      <priority>0.5</priority>
-    </url>
-    {% endunless %}
+  <url>
+    <loc>{{ site.url }}{{ site.baseurl }}{{ author.url }}</loc>
+    {% if author.last_modified_at %}
+    <lastmod>{{ author.last_modified_at | date_to_xmlschema }}</lastmod>
+    {% endif %}
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
   {% endfor %}
 </urlset>
 
