@@ -84,12 +84,13 @@ layout: default
       {% endif %}
     </div>
     <div class="col-lg-8">
-      {% if site.author_bio %}
       <div class="card">
         <h1 class="card-title">About</h1>
-        <p>{{ site.author_bio }}</p>
+        <div class="card-body">
+          {{ content }}
+        </div>
       </div>
-      {% endif %} {% if site.show_author_project_details == true %}
+      {% if site.show_author_project_details == true %}
       <div id="author_projects" class="card">
         <h1 class="card-title">Projects</h1>
         <br />
