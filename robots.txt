@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://wooodypark.github.io/sitemap.xml
