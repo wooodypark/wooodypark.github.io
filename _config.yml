@@ -168,7 +168,7 @@ plugins:
   - jekyll-paginate
   - jekyll-gist
   - jekyll-seo-tag
-  - jekyll-sitemap
+  # - jekyll-sitemap  # Disabled: using manual sitemap.xml
   - jekyll-feed
 
   # jekyll admin is causing issues with github pages, so it's disabled by default
