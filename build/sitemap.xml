@@ -84,7 +84,7 @@
   <!-- Authors -->
   
   <url>
-    <loc>http://localhost:4000/blog/authors/woodypark</loc>
+    <loc>http://localhost:4000/blog/authors/woodypark/</loc>
     
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
