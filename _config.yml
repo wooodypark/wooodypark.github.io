@@ -144,7 +144,7 @@ plugins:
   - jekyll-paginate
   - jekyll-gist
   - jekyll-seo-tag
-  - jekyll-sitemap
+  # - jekyll-sitemap  # Disabled: using manual sitemap.xml
   - jekyll-feed
 
 # Exclude from processing.
