@@ -853,6 +853,8 @@ header {
 .company-logo {
     width: 100px;
     height: 100px;
+    object-fit: contain;
+    object-position: center;
 }
 
 .author-profile-img {

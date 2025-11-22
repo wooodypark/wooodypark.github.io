@@ -1,10 +1,8 @@
 title: woody's blog
 subtitle: 
-# description: >- # this means to ignore newlines until "baseurl:"
-#   devlopr-jekyll is a beautiful Jekyll Theme Built For Developers, which is optimized for speed and readability.
 
-url: "https://wooodypark.github.io" # the base hostname & protocol for your site, e.g. https://example.github.io
-baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://wooodypark.github.io"
+baseurl: ""
 
 # Navigation
 urls:
@@ -14,15 +12,6 @@ urls:
       url: /about
     - text: Blog
       url: /blog
-    # - text: Gallery
-    #   url: /gallery
-    # - text: Shop
-    #   url : /shop
-    # - text: Contact
-    #   url : /contact
-
-
-# Edit Author details (For multi authors check _data/authors.yml)
 
 author_logo: authors/woodypark.png
 author: Woody Park
@@ -31,22 +20,16 @@ author_email: "harry122226@gmail.com"
 author_location: South Korea
 author_website_url: "https://github.com/wooodypark"
 typewrite-text: This is my blog. I'm a backend developer.
-hero_cover_img: sample_cover.jpg # replace this for changing homepage cover (eg. try cover.jpeg). Image should be in /assets/img
+hero_cover_img: sample_cover.jpg 
 
-# # Experiences
-# author_work_experiences:
-#             - company_name: Google
-#               company_logo: google.png
-#               company_url: https://google.com
-#               designation: Software Engineer
-#               description: Worked on various Google Products
-#               visibility: true
-#             - company_name: Microsoft
-#               company_logo: microsoft.png
-#               company_url: https://microsoft.com
-#               designation: Azure Developer
-#               description: Worked on various Azure Cloud Products
-#               visibility: true
+# Experiences
+author_work_experiences:
+            - company_name: Daangn
+              company_logo: daangn.png
+              company_url: https://about.daangn.com
+              designation: Backend Engineer (Intern)
+              description: Working as a Backend Engineer intern in the Location Intelligence team. (Sep 2025 ~)
+              visibility: true
 
 # # Education
 # author_education_details:
@@ -107,7 +90,7 @@ highlighter: rouge
 permalink: pretty
 
 # Choose what to show ( can be true or false)
-show_author_work_experiences: false
+show_author_work_experiences: true
 show_author_education_details: false
 show_author_project_details: false
 
@@ -133,17 +116,10 @@ paginate_path: "/blog/page/:num/"
 #     category: '/category/:name/'
 
 collections:
-  # products:
-  #   output: true
   authors:
     output: true
 
 defaults:
-  # -
-  #   scope:
-  #     path: "gallery"
-  #   values:
-  #     permalink: /:path/:basename:output_ext
   -
     scope:
       path: ""

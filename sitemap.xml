@@ -35,7 +35,7 @@ layout: null
   
   <!-- Pages -->
   {% for page in site.pages %}
-    {% if page.layout == 'about-me' or page.layout == 'contact' %}
+    {% if page.layout == 'about-me' %}
   <url>
     <loc>{{ site.url }}{{ site.baseurl }}{{ page.url }}</loc>
     {% if page.last_modified_at %}
