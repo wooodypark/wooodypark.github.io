@@ -144,22 +144,8 @@ plugins:
   - jekyll-paginate
   - jekyll-gist
   - jekyll-seo-tag
-  # - jekyll-sitemap  # Disabled: using manual sitemap.xml
+  - jekyll-sitemap
   - jekyll-feed
-
-  # jekyll admin is causing issues with github pages, so it's disabled by default
-  # - jekyll-admin 
-
-# Jekyll Admin Config
-# jekyll_admin:
-  # hidden_links:
-  #   - posts
-  #   - pages
-  #   - staticfiles
-  #   - datafiles
-  #   - configuration
-  # homepage: "posts"
-
 
 # Exclude from processing.
 # The following items will not be processed, by default.
@@ -220,4 +206,4 @@ exclude:
   - assets/bower_components/imagesloaded/README.md
 
 
-destination: ./build
+# destination: ./build
