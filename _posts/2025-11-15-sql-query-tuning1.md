@@ -7,7 +7,7 @@ date: '2025-11-15 20:45:31 +0900'
 category: sql
 thumbnail: /assets/img/posts/sql1.jpg
 keywords: sql, query tuning, index, explain, database optimization, postgresql, gist index
-permalink: /blog/sql-query-tuning-index-type-conversion/
+permalink: /blog/sql-query-tuning1/
 ---
 
 ---

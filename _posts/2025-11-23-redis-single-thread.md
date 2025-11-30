@@ -7,7 +7,7 @@ date: '2025-11-23 19:43:20 +0900'
 category: redis
 thumbnail: /assets/img/posts/redisthumb.png
 keywords: redis, single thread, multithreading, event loop, keys, scan, io threading, network io
-permalink: /blog/redis-single-thread-deep-dive/
+permalink: /blog/redis-single-thread/
 ---
 
 ---
