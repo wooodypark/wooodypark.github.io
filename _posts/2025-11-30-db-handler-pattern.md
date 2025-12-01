@@ -24,9 +24,11 @@ permalink: /blog/db-handler-pattern/
 
 ### 초기 구조: Repository가 DB를 직접 관리
 
-처음에는 Repository가 Service와 동일하게 `readDB`와 `writeDB`를 필드로 가지고, 각 메서드에서 이를 직접 사용하는 구조로 시작했습니다.
+처음에는 Repository가 `readDB`와 `writeDB`를 필드로 가지고, 각 메서드에서 이를 직접 사용하는 구조로 시작했습니다.
 
 ```go
+package repository
+
 // Repository가 readDB, writeDB를 필드로 가지고 있음
 type ARepository struct {
     readDB  *bun.DB
@@ -62,6 +64,12 @@ func (r *ARepository) Create(ctx context.Context, model *AModel) (int64, error) 
 #### Service에서의 사용
 
 ```go
+package service
+
+import (
+    "your-project/repository"
+)
+
 // Service도 readDB, writeDB를 필드로 가지고 있음
 type AService struct {
     readDB      *bun.DB
@@ -91,6 +99,8 @@ func NewAService(readDB, writeDB *bun.DB) *AService {
 예를 들어, A 엔티티를 생성하고 동시에 B 엔티티도 함께 생성해야 하는 경우가 있었는데, 두 작업이 모두 성공하거나 모두 실패해야 했습니다.
 
 ```go
+package service
+
 // 예: A와 B를 함께 생성해야 함
 func (s *AService) CreateAWithB(ctx context.Context, req *CreateRequest) error {
     // 문제: 각 Repository가 내부 DB를 사용하므로 같은 트랜잭션으로 묶을 수 없음
@@ -117,6 +127,8 @@ func (s *AService) CreateAWithB(ctx context.Context, req *CreateRequest) error {
 #### 변경된 Repository 구조
 
 ```go
+package repository
+
 // Repository는 DB를 필드로 가지지 않음
 type ARepository struct{}
 
@@ -138,6 +150,8 @@ func (r *ARepository) Create(
 #### Service에서 트랜잭션으로 묶기
 
 ```go
+package service
+
 func (s *AService) CreateAWithB(ctx context.Context, req *CreateRequest) error {
     // Service에서 트랜잭션 시작
     err := s.writeDB.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {
@@ -168,6 +182,8 @@ func (s *AService) CreateAWithB(ctx context.Context, req *CreateRequest) error {
 #### 문제 상황 1: 조회 시 readDB vs writeDB 선택 실수
 
 ```go
+package service
+
 func (s *AService) GetA(ctx context.Context, id int64) (*AModel, error) {
     // 실수로 writeDB를 전달할 수도 있음
     return s.aRepo.GetByID(ctx, s.writeDB, id)  // 😰 readDB를 써야 하는데
@@ -179,6 +195,8 @@ func (s *AService) GetA(ctx context.Context, id int64) (*AModel, error) {
 #### 문제 상황 2: 트랜잭션 내부에서 일반 DB를 전달하는 실수
 
 ```go
+package service
+
 err := s.writeDB.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {
     // 실수로 writeDB를 전달 (tx를 전달해야 함)
     id, err := s.aRepo.Create(ctx, s.writeDB, aModel)  // 😰 tx를 써야 하는데
@@ -192,6 +210,8 @@ err := s.writeDB.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {
 #### 문제 상황 3: 메서드 시그니처 복잡도
 
 ```go
+package repository
+
 // Repository 메서드가 *bun.DB와 *bun.Tx 둘 다 받아야 함?
 func (r *repo) Create(
     ctx context.Context,
@@ -224,6 +244,8 @@ func (r *repo) CreateTx(
 3. **Service는 옵션만 지정하면 Handler가 적절한 DB 선택**
 
 ```go
+package dbexec
+
 // Handler 인터페이스: DB 작업을 추상화
 type Handler interface {
     NewSelect() *bun.SelectQuery
@@ -243,6 +265,8 @@ var (
 #### Handler의 선택 로직
 
 ```go
+package dbexec
+
 type dbHandler struct {
     readDB  *bun.DB
     writeDB *bun.DB
@@ -287,6 +311,12 @@ Handler는 다음 우선순위로 DB를 선택하도록 구현했습니다:
 #### Repository는 Handler만 받음
 
 ```go
+package repository
+
+import (
+    "your-project/dbexec"
+)
+
 // Repository는 DB를 필드로 가지지 않음
 type ARepository struct{}
 
@@ -295,7 +325,7 @@ func NewARepository() ARepository {
 }
 
 // Handler 인터페이스를 받음
-func (r *ARepository) GetByID(ctx context.Context, dbHandler Handler, id int64) (*AModel, error) {
+func (r *ARepository) GetByID(ctx context.Context, dbHandler dbexec.Handler, id int64) (*AModel, error) {
     var model AModel
     err := dbHandler.NewSelect().
         Model(&model).
@@ -304,7 +334,7 @@ func (r *ARepository) GetByID(ctx context.Context, dbHandler Handler, id int64) 
     return &model, err
 }
 
-func (r *ARepository) Create(ctx context.Context, dbHandler Handler, model *AModel) (int64, error) {
+func (r *ARepository) Create(ctx context.Context, dbHandler dbexec.Handler, model *AModel) (int64, error) {
     result, err := dbHandler.NewInsert().Model(model).Exec(ctx)
     return result.LastInsertId()
 }
@@ -315,6 +345,13 @@ func (r *ARepository) Create(ctx context.Context, dbHandler Handler, model *AMod
 #### Service에서 간단하게 사용
 
 ```go
+package service
+
+import (
+    "your-project/dbexec"
+    "your-project/repository"
+)
+
 // Service는 여전히 readDB, writeDB를 필드로 가짐
 type AService struct {
     readDB  *bun.DB
@@ -364,6 +401,12 @@ func (s *AService) GetAFromWrite(ctx context.Context, id int64) (*AModel, error)
 ✅ **Service에서 트랜잭션을 시작하고, 같은 `dbHandler`를 여러 Repository에 전달**하면 모든 Repository 작업이 하나의 트랜잭션으로 묶이게 되었습니다.
 
 ```go
+package service
+
+import (
+    "your-project/dbexec"
+)
+
 err := s.writeDB.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {
     dbHandler := dbexec.NewHandler(s.readDB, s.writeDB, dbexec.WithTx(&tx))
     
@@ -421,6 +464,8 @@ Handler 패턴이 없을 때, sqlmock을 사용해서 Service 메서드를 테�
 트랜잭션을 사용하는 Service 메서드를 테스트할 때, `RunInTx` 내부에서 생성된 `tx` 객체를 Repository에 전달해야 하는데, sqlmock으로는 이 `tx` 객체를 직접 제어하기 어려웠습니다.
 
 ```go
+package service
+
 // Service 메서드가 트랜잭션 사용
 func (s *AService) CreateAWithB(ctx context.Context, req *CreateRequest) error {
     err := s.writeDB.RunInTx(ctx, nil, func(ctx context.Context, tx bun.Tx) error {
@@ -442,6 +487,14 @@ sqlmock으로 테스트하려면, executor를 만들어서 mock으로 처리해�
 Handler 패턴의 핵심 장점은 Repository가 `*bun.DB`와 `*bun.Tx`를 구분할 필요가 없다는 점입니다. Repository는 Handler 인터페이스만 받기 때문에, sqlmock으로 테스트할 때 `bunDB`를 그대로 사용해도 됩니다.
 
 ```go
+package service_test
+
+import (
+    "github.com/DATA-DOG/go-sqlmock"
+    "github.com/uptrace/bun/dialect/mysqldialect"
+    "your-project/service"
+)
+
 // sqlmock 테스트가 간단해짐
 func TestAService_CreateAWithB(t *testing.T) {
     sqlDB, sqlMock, _ := sqlmock.New()
@@ -454,15 +507,17 @@ func TestAService_CreateAWithB(t *testing.T) {
     sqlMock.ExpectExec("INSERT INTO B...").WillReturnResult(sqlmock.NewResult(1, 1))
     sqlMock.ExpectCommit()
     
-    service := &AService{
-        writeDB: bunDB,  // bunDB를 그대로 사용
+    service := &service.AService{
+        WriteDB: bunDB,  // bunDB를 그대로 사용
         // ...
     }
     
     // Handler가 내부적으로 tx를 처리하므로,
     // Repository는 신경 쓸 필요 없고, sqlmock의 기대값과 매칭됨
-    err := service.CreateAWithB(ctx, req)
-    assert.NoError(t, err)
+    err := service.CreateAWithB(context.Background(), req)
+    if err != nil {
+        t.Errorf("unexpected error: %v", err)
+    }
 }
 ```
 
