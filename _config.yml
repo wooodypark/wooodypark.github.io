@@ -178,7 +178,6 @@ exclude:
   - build/
   - admin/
   - SECURITY.md
-  - googlef01e39e4d240f6b0.html
   - assets/bower_components/isotope-layout/README.md
   - assets/bower_components/icono/README.md
   - assets/bower_components/font-awesome/advanced-options/use-with-node-js/fontawesome-svg-core/README.md
