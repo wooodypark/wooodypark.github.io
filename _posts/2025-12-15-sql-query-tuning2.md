@@ -218,7 +218,7 @@ SHOW INDEX FROM users WHERE Key_name = 'idx_user_status_createdat';
 
 ---
 
-### 인덱스 추가의 부담: 샤딩과 대용량 데이터
+### 인덱스 추가의 부담
 
 만약 DB가 **샤딩이 많이 되어있고, 데이터가 굉장히 많다면** 인덱스를 추가하는 것만으로도 큰 부담이 됩니다.
 
