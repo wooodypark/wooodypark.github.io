@@ -24,7 +24,7 @@ permalink: /blog/redis-rate-limiter/
 
 하지만 근본적으로는 **모든 업스트림 서비스들을 안정적으로 보호**해야 한다는 필요성을 느꼈습니다.
 
-#### 🔍 왜 Rate Limiter가 필요했을까?
+#### 왜 Rate Limiter가 필요했을까?
 
 아래는 실제 비즈니스 로직을 추상화해서 예시로 작성한 `GetUserTrustScore` API의 구조입니다. 하나의 요청이 얼마나 많은 업스트림 서비스에 부하를 주는지 한눈에 알 수 있습니다.
 
@@ -180,7 +180,7 @@ func (l *RateLimiter) Allow(ctx context.Context) (bool, error) {
 
 Rate Limiter를 비즈니스 로직에 직접 넣으면 코드가 지저분해집니다. 저희는 기존 클라이언트를 래핑하는 **Decorator 패턴**을 사용하여 **캐싱(Cache)과 처리율 제한(Rate Limit)**을 깔끔하게 결합했습니다.
 
-#### 📦 `cachedTransactionServiceClient` 구현체
+#### `cachedTransactionServiceClient` 구현체
 
 업스트림 서비스를 보호하기 위해, 실제 네트워크 호출이 발생하는 **Cache Miss** 시점에만 Rate Limit 쿼터를 소모합니다.
 
@@ -272,7 +272,7 @@ func (c *cachedTransactionServiceClient) GetTrustScoreFromHistory(ctx context.Co
 
 Rate Limiter 설계에서 가장 고민했던 부분은 **Redis 장애 시 어떻게 동작할 것인가**였습니다.
 
-#### 🤔 상황별 전략 선택
+#### 상황별 전략 선택
 
 **1. 보호가 중요한 업스트림 서비스 (Fail-Closed 선택)**
 
@@ -302,7 +302,7 @@ rateLimiter := ratelimiter.NewRateLimiterWithFailOpen(
 
 Network Service는 상대적으로 안정적이고 처리 용량이 커서, Redis 장애 시 **가용성을 우선**하도록 했습니다.
 
-#### 💡 실제 운영에서의 교훈
+#### 실제 운영에서의 교훈
 
 처음에는 모든 서비스를 Fail-Closed로 설정했었는데, Redis 클러스터에 일시적인 문제가 생겼을 때 **전체 API가 먹통**이 되는 경험을 했습니다.
 
@@ -314,7 +314,7 @@ Network Service는 상대적으로 안정적이고 처리 용량이 커서, Redi
 
 Rate Limiter는 도입하는 것보다 **운영**하는 것이 더 중요합니다. 저희는 다음과 같은 메트릭을 달아 적정 RPS를 지속적으로 튜닝하고 있습니다.
 
-#### 📊 핵심 메트릭들
+#### 핵심 메트릭들
 
 ```go
 package metrics
@@ -351,13 +351,13 @@ func RecordFailOpen(service string) {
 }
 ```
 
-#### 📈 운영하면서 배운 것들
+#### 운영하면서 배운 것들
 
-**🔍 모니터링 관점**
+**모니터링 관점**
 - **Rate Limit Exceeded 메트릭**: 언제 얼마나 차단되는지 보면서 RPS 수준이 적절한지 판단
 - **Fail-Open 발생 횟수**: Redis 문제로 예상치 못하게 통과된 요청들을 추적해서 시스템 안정성 체크
 
-**⚖️ 튜닝 관점**  
+**튜닝 관점**  
 - **서비스별 패턴 분석**: 각 업스트림 서비스마다 트래픽 패턴이 다르다는 걸 알게 됨
 - **개별 조정의 필요성**: 획일적인 RPS보다는 서비스별 맞춤 설정이 중요
 
@@ -371,19 +371,19 @@ func RecordFailOpen(service string) {
 
 이번에 Rate Limiter를 구현하면서 **완벽한 솔루션은 없다**는 걸 다시 한번 느꼈습니다.
 
-#### 🤔 알게 된 문제점들
+#### 알게 된 문제점들
 
 **멱등성 문제**: 같은 요청이라도 우선순위 1번 서비스가 Rate Limit에 걸리면 2번으로 넘어가서, 결과가 달라질 수 있습니다. 이론적으로는 같은 Input에 같은 Output이 나와야 하는데, 시스템 상태에 따라 다른 결과가 나오는 셈이죠.
 
 **복잡도 증가**: 각 서비스별로 다른 Fail-Open/Fail-Closed 전략, 모니터링, 튜닝... 관리해야 할 포인트가 확실히 많아졌습니다.
 
-#### ✅ 그럼에도 선택한 이유
+#### 그럼에도 선택한 이유
 
 하지만 우리 시스템 특성상 **여러 우선순위의 폴백**이 있어서, 완전히 실패하기보다는 "차선의 결과"라도 제공할 수 있다고 판단했습니다.
 
 **시스템 전체가 죽는 것 vs 일부 요청의 멱등성이 깨지는 것** - 이 트레이드오프에서는 후자를 선택하는 게 낫다고 생각했어요.
 
-#### 🔄 앞으로 시도해볼 것들
+#### 앞으로 시도해볼 것들
 
 - **동적 Rate Limiting**: 시간대나 서비스 상태에 따른 자동 조정
 - **Circuit Breaker와의 조합**: Rate Limit + 장애 감지로 더 스마트한 보호
